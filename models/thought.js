@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-
+const Reaction = require('./reaction');
 // Schema to create a course model
 const thoughtSchema = new Schema(
   {
@@ -17,14 +17,7 @@ const thoughtSchema = new Schema(
         type: String,
         required: true,
     },
-    reactions: 
-    [
-      // Array of nested documents created with the reactionSchema
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Reaction',
-      },
-    ],
+    reactions: [Reaction],
   },
   {
     toJSON: {
