@@ -1,39 +1,34 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/connection');
+const { Schema, model } = require('mongoose');
 
-class Thought extends Model {}
-
-Thought.init(
+// Schema to create a course model
+const ThoughtSchema = new Schema(
   {
     thoughtText: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
+      type: String,
+      required: true,
+      minLength: 1,
+      maxLength: 280
     },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
-    thought_text: {
-      type: DataTypes.TEXT,
-      allowNull: false
+    username: {
+        type: String,
+        required: true,
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'user',
-        key: 'id',
-      },
+    reactions: {
+      // Array of nested documents created with the reactionSchema
     },
   },
   {
-    sequelize,
-    timestamps: false,
-    freezeTableName: true,
-    underscored: true,
-    modelName: 'thought',
+    toJSON: {
+      virtuals: true,
+    },
+    id: false,
   }
 );
+
+const Thought = model('thought', thoughtSchema);
 
 module.exports = Thought;
