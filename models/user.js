@@ -13,10 +13,7 @@ const userSchema = new Schema(
         type: String,
         unique: true,
         required: true,
-        validate: {
-            validator: () => Promise.resolve(false),
-            message: 'Email validation failed'
-          }
+        match: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/
     },
     thoughts: [
       // arr of _id values refrencing the Thought model
