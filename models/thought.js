@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 // Schema to create a course model
-const ThoughtSchema = new Schema(
+const thoughtSchema = new Schema(
   {
     thoughtText: {
       type: String,
@@ -17,9 +17,14 @@ const ThoughtSchema = new Schema(
         type: String,
         required: true,
     },
-    reactions: {
+    reactions: 
+    [
       // Array of nested documents created with the reactionSchema
-    },
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Reaction',
+      },
+    ],
   },
   {
     toJSON: {

@@ -18,12 +18,20 @@ const userSchema = new Schema(
             message: 'Email validation failed'
           }
     },
-    thoughts: {
+    thoughts: [
       // arr of _id values refrencing the Thought model
-    },
-    friends: {
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Thought',
+      },
+    ],
+    friends: [
       // arr of _id values refrencing the User model (self-reference)
-    },
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: {
@@ -32,6 +40,16 @@ const userSchema = new Schema(
     id: false,
   }
 );
+
+// friendCount
+// .virtual('firendCount')
+// .get(function () {
+//   return `${friends.length}`
+// })
+// .set(function(v){
+//   const totalFriends = v[0]
+//   this.set({ totalFriends })
+// })
 
 const User = model('user', userSchema);
 
