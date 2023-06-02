@@ -1,1 +1,2 @@
 # socialAPI
+This project was for a social media startup. What we made was a foundation of a network for posts, friends, and data management. You are able to create, update, and delete users in your database. You can add and remove friends as you see fit. 
