@@ -1,4 +1,5 @@
 const { User, reactionSchema, Thought } = require('../models');
+const { validate } = require('../models/user');
 
 module.exports = {
   // Get all thoughts
@@ -35,7 +36,20 @@ module.exports = {
   // Delete a thought and associated apps
   deleteThought(req, res) {
     Thought.findOneAndDelete({ _id: req.params.thoughtId })
-      .then(() => res.json({ message: 'Begone Thought!' }))
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: 'No Thought found.' })
+          : User.findOneAndUpdate(
+            {thoughts: req.params.thoughtId},
+            {$pull: {thoughts: req.params.thoughtId}},
+            {new: true}
+          )
+      )
+      .then((user) => 
+      !user
+      ? res.status(404).json({ message: 'Thought deleted, No User found.' })
+      : res.json({ message: 'Thought deleted.' })
+      )
       .catch((err) => res.status(500).json(err));
   },
   updateThought(req, res){
@@ -66,12 +80,17 @@ module.exports = {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       {$pull: { reactions: {
-        _id: req.params.reactionsId,
+        reactionId: req.params.reactionsId,
       }}},
-      {new: true}
+      {new: true},
+      {runValidators: true}
     )
-    .select('-__v')
-      .then(() => res.json({ message: 'Reaction deleted!' }))
+    // .select('-__v')
+      .then((reaction) => 
+      !reaction
+        ? res.status(404).json({message: 'No reacton found'})
+        : res.json(reaction)
+      )
       .catch((err) => res.status(500).json(err));
   },
 }

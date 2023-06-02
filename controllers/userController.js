@@ -22,7 +22,6 @@ module.exports = {
   // create a new user
   createUser(req, res) {
     User.create(req.body)
-    .select('-__v')
       .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
@@ -69,10 +68,10 @@ module.exports = {
   deleteFriend(req, res) {
     User.findOneAndDelete(
       { _id: req.params.userId },
-      { $pull: { friends: friendId } },
+      { $pull: { friends: req.params.friendId } },
       { new: true }
       )
-      .select('-__v')
+      // .select('-__v')
       .then((user) => {
         if (!user) {
           res.status(404).json({ message: 'No user with that ID' });
